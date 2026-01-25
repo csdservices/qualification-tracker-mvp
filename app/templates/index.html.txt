@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Render Test App</title>
+    <style>
+        body { font-family: Arial; margin: 40px; }
+        input { margin: 5px; }
+    </style>
+</head>
+<body>
+
+<h1>Render Test – Staff List</h1>
+
+<form method="post" action="/add">
+    <input name="first_name" placeholder="First name" required>
+    <input name="last_name" placeholder="Last name" required>
+    <button type="submit">Add Staff</button>
+</form>
+
+<h2>Staff</h2>
+<ul>
+    {% for s in staff %}
+        <li>{{ s.first_name }} {{ s.last_name }}</li>
+    {% endfor %}
+</ul>
+
+</body>
+</html>
