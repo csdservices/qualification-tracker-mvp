@@ -46,6 +46,28 @@
     <button type="submit">Add Staff</button>
 </form>
 
+<h2>Add Organisation</h2>
+
+<form method="post" action="/organisations/create">
+    <input
+        type="text"
+        name="name"
+        placeholder="Organisation name"
+        required
+    />
+    <button type="submit">Add</button>
+</form>
+
+<h2>Existing Organisations</h2>
+
+<ul>
+  {% for org in organisations %}
+    <li>{{ org.name }}</li>
+  {% else %}
+    <li>No organisations yet</li>
+  {% endfor %}
+</ul>
+
 <hr>
 {% endfor %}
 </html>

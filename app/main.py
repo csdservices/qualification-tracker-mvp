@@ -4,6 +4,10 @@ from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 from fastapi import Form
 
+from fastapi import Form
+from fastapi.responses import RedirectResponse
+from starlette.status import HTTP_303_SEE_OTHER
+
 from .database import SessionLocal, engine
 from . import models
 
@@ -135,3 +139,32 @@ def read_staff(db: Session = Depends(get_db)):
         }
         for staff in staff_members
     ]
+
+
+# -- CREATE ORGANISATIONS
+@app.post("/organisations/create")
+def create_organisation(
+    name: str = Form(...),
+    db: Session = Depends(get_db)
+):
+    organisation = models.Organisation(name=name)
+    db.add(organisation)
+    db.commit()
+    db.refresh(organisation)
+
+    return RedirectResponse(
+        url="/admin",
+        status_code=HTTP_303_SEE_OTHER
+    )
+
+@app.get("/admin", response_class=HTMLResponse)
+def admin_page(request: Request, db: Session = Depends(get_db)):
+    organisations = db.query(models.Organisation).all()
+
+    return templates.TemplateResponse(
+        "admin.html",
+        {
+            "request": request,
+            "organisations": organisations
+        }
+    )
