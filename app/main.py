@@ -75,8 +75,3 @@ def create_staff(
 
     return RedirectResponse("/", status_code=HTTP_303_SEE_OTHER)
 
-
-# -- reset block --
-models.Base.metadata.drop_all(bind=engine)
-models.Base.metadata.create_all(bind=engine)
-
