@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Dashboard</title>
+    <style>
+        table { border-collapse: collapse; width: 80%; margin: 20px auto; }
+        th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        h1 { text-align: center; }
+    </style>
+</head>
+<body>
+    <h1>Organisations & Staff</h1>
+
+{% for org in organisations %}
+<h2>{{ org.name }}</h2>
+
+{% if org.staff_members %}
+<table>
+    <tr>
+        <th>ID</th>
+        <th>UID</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Created At</th>
+    </tr>
+    {% for staff in org.staff_members %}
+    <tr>
+        <td>{{ staff.id }}</td>
+        <td>{{ staff.uid }}</td>
+        <td>{{ staff.name }}</td>
+        <td>{{ staff.email }}</td>
+        <td>{{ staff.created_at }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% else %}
+<p>No staff for this organisation.</p>
+{% endif %}
+
+<!-- Add staff form -->
+<form method="post" action="/admin/add_staff">
+    <input type="hidden" name="org_id" value="{{ org.id }}">
+    <input type="text" name="name" placeholder="Staff Name" required>
+    <input type="email" name="email" placeholder="Staff Email" required>
+    <button type="submit">Add Staff</button>
+</form>
+
+<hr>
+{% endfor %}
+</html>
