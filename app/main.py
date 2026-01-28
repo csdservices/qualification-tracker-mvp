@@ -49,11 +49,30 @@ def read_organisations(db: Session = Depends(get_db)):
         for org in organisations
     ]
 
-# -- tempo organisation add for check TO DELETE --
-@app.get("/seed")
-def seed(db: Session = Depends(get_db)):
-    org = models.Organisation(name="Demo Swim School")
-    db.add(org)
+
+# -- ADDING STAFF VIA WEB FORM --
+from fastapi import Form
+from fastapi.responses import RedirectResponse
+from starlette.status import HTTP_303_SEE_OTHER
+
+@app.post("/staff")
+def create_staff(
+    name: str = Form(...),
+    organisation_id: int = Form(...),
+    db: Session = Depends(get_db)
+):
+    # Check if staff already exists? (Optional, for multi-org scenario)
+    staff = Staff(name=name)
+    db.add(staff)
     db.commit()
-    db.refresh(org)
-    return {"id": org.id, "name": org.name}
+    db.refresh(staff)
+
+    # Link staff to organisation
+    org = db.query(models.Organisation).get(organisation_id)
+    if org:
+        org.staff_members.append(staff)
+        db.commit()
+
+    return RedirectResponse("/", status_code=HTTP_303_SEE_OTHER)
+
+

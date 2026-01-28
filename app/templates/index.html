@@ -17,10 +17,30 @@
     <button type="submit">Add Staff</button>
 </form>
 
-<h2>Staff</h2>
+<h2>Add Staff</h2>
+<form action="/staff" method="post">
+    <input type="text" name="name" placeholder="Staff name" required>
+
+    <select name="organisation_id" required>
+        {% for org in organisations %}
+            <option value="{{ org.id }}">{{ org.name }}</option>
+        {% endfor %}
+    </select>
+
+    <button type="submit">Add Staff</button>
+</form>
+
+<h3>Staff Members</h3>
 <ul>
-    {% for s in staff %}
-        <li>{{ s.first_name }} {{ s.last_name }}</li>
+    {% for org in organisations %}
+        <li>
+            <strong>{{ org.name }}</strong>
+            <ul>
+                {% for staff in org.staff_members %}
+                    <li>{{ staff.name }} ({{ staff.uid }})</li>
+                {% endfor %}
+            </ul>
+        </li>
     {% endfor %}
 </ul>
 
