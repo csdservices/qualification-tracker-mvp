@@ -3,10 +3,13 @@ from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 
-from .database import SessionLocal
+from .database import SessionLocal, engine
 from . import models
 
 app = FastAPI()
+
+# 🔥 THIS CREATES YOUR TABLES
+models.Base.metadata.create_all(bind=engine)
 
 # Templates
 templates = Jinja2Templates(directory="app/templates")
@@ -23,7 +26,6 @@ def get_db():
 
 # ---------- Routes ----------
 
-# Homepage
 @app.get("/", response_class=HTMLResponse)
 def read_root(request: Request):
     return templates.TemplateResponse(
@@ -32,7 +34,6 @@ def read_root(request: Request):
     )
 
 
-# Test DB connection
 @app.get("/organisations")
 def read_organisations(db: Session = Depends(get_db)):
     organisations = db.query(models.Organisation).all()
@@ -40,3 +41,4 @@ def read_organisations(db: Session = Depends(get_db)):
         {"id": org.id, "name": org.name}
         for org in organisations
     ]
+
