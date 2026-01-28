@@ -27,10 +27,17 @@ def get_db():
 # ---------- Routes ----------
 
 @app.get("/", response_class=HTMLResponse)
-def read_root(request: Request):
+def read_root(
+    request: Request,
+    db: Session = Depends(get_db)
+):
+    organisations = db.query(models.Organisation).all()
     return templates.TemplateResponse(
         "index.html",
-        {"request": request}
+        {
+            "request": request,
+            "organisations": organisations
+        }
     )
 
 

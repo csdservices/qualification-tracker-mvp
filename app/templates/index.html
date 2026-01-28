@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Render Test App</title>
+    <title>Qual Track MVP</title>
     <style>
         body { font-family: Arial; margin: 40px; }
         input { margin: 5px; }
@@ -9,7 +9,7 @@
 </head>
 <body>
 
-<h1>Render Test – Staff List</h1>
+<h1>Qual Track</h1>
 
 <form method="post" action="/add">
     <input name="first_name" placeholder="First name" required>
@@ -23,6 +23,22 @@
         <li>{{ s.first_name }} {{ s.last_name }}</li>
     {% endfor %}
 </ul>
+
+
+</head>
+
+    <h2>Organisations NEW</h2>
+
+    {% if organisations %}
+        <ul>
+            {% for org in organisations %}
+                <li>{{ org.name }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No organisations yet.</p>
+    {% endif %}
+
 
 </body>
 </html>
