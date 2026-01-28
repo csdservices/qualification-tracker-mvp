@@ -42,3 +42,11 @@ def read_organisations(db: Session = Depends(get_db)):
         for org in organisations
     ]
 
+# -- tempo organisation add for check TO DELETE --
+@app.get("/seed")
+def seed(db: Session = Depends(get_db)):
+    org = models.Organisation(name="Demo Swim School")
+    db.add(org)
+    db.commit()
+    db.refresh(org)
+    return {"id": org.id, "name": org.name}
